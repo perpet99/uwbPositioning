@@ -7,7 +7,7 @@ For ESP32 UWB Pro with Display
 #include <SPI.h>
 #include "DW1000Ranging.h"
 
-#include <Wire.h>
+//#include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
@@ -36,24 +36,24 @@ struct Link
 
 struct Link *uwb_data;
 
-Adafruit_SSD1306 display(128, 64, &Wire, -1);
+//Adafruit_SSD1306 display(128, 64);//, &Wire, -1);
 
 void setup()
 {
     Serial.begin(115200);
 
-    Wire.begin(I2C_SDA, I2C_SCL);
-    delay(1000);
-    // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-    if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
-    { // Address 0x3C for 128x32
-        Serial.println(F("SSD1306 allocation failed"));
-        for (;;)
-            ; // Don't proceed, loop forever
-    }
-    display.clearDisplay();
+    // display.begin( SSD1306_SWITCHCAPVCC, 0x3c);
+    // delay(1000);
+    // // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+    // if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
+    // { // Address 0x3C for 128x32
+    //     Serial.println(F("SSD1306 allocation failed"));
+    //     for (;;)
+    //         ; // Don't proceed, loop forever
+    // }
+    // display.clearDisplay();
 
-    logoshow();
+    // logoshow();
 
     // init the configuration
     SPI.begin(SPI_SCK, SPI_MISO, SPI_MOSI);
@@ -83,7 +83,7 @@ void loop()
     DW1000Ranging.loop();
     if ((millis() - runtime) > 1000)
     {
-        display_uwb(uwb_data);
+        //display_uwb(uwb_data);
         runtime = millis();
     }
 }
@@ -258,69 +258,69 @@ void delete_link(struct Link *p, uint16_t addr)
 
 // SSD1306
 
-void logoshow(void)
-{
-    display.clearDisplay();
+// void logoshow(void)
+// {
+//     display.clearDisplay();
 
-    display.setTextSize(2);              // Normal 1:1 pixel scale
-    display.setTextColor(SSD1306_WHITE); // Draw white text
-    display.setCursor(0, 0);             // Start at top-left corner
-    display.println(F("Makerfabs"));
+//     display.setTextSize(2);              // Normal 1:1 pixel scale
+//     display.setTextColor(SSD1306_WHITE); // Draw white text
+//     display.setCursor(0, 0);             // Start at top-left corner
+//     display.println(F("Makerfabs"));
 
-    display.setTextSize(1);
-    display.setCursor(0, 20); // Start at top-left corner
-    display.println(F("DW1000 DEMO"));
-    display.display();
-    delay(2000);
-}
+//     display.setTextSize(1);
+//     display.setCursor(0, 20); // Start at top-left corner
+//     display.println(F("DW1000 DEMO"));
+//     display.display();
+//     delay(2000);
+// }
 
-void display_uwb(struct Link *p)
-{
-    struct Link *temp = p;
-    int row = 0;
+// void display_uwb(struct Link *p)
+// {
+//     struct Link *temp = p;
+//     int row = 0;
 
-    display.clearDisplay();
+//     display.clearDisplay();
 
-    display.setTextColor(SSD1306_WHITE);
+//     display.setTextColor(SSD1306_WHITE);
 
-    if (temp->next == NULL)
-    {
-        display.setTextSize(2);
-        display.setCursor(0, 0);
-        display.println("No Anchor");
-        display.display();
-        return;
-    }
+//     if (temp->next == NULL)
+//     {
+//         display.setTextSize(2);
+//         display.setCursor(0, 0);
+//         display.println("No Anchor");
+//         display.display();
+//         return;
+//     }
 
-    while (temp->next != NULL)
-    {
-        temp = temp->next;
+//     while (temp->next != NULL)
+//     {
+//         temp = temp->next;
 
-        // Serial.println("Dev %d:%d m", temp->next->anchor_addr, temp->next->range);
-        Serial.println(temp->anchor_addr, HEX);
-        Serial.println(temp->range);
+//         // Serial.println("Dev %d:%d m", temp->next->anchor_addr, temp->next->range);
+//         Serial.println(temp->anchor_addr, HEX);
+//         Serial.println(temp->range);
 
-        char c[30];
+//         char c[30];
 
-        // sprintf(c, "%X:%.1f m %.1f", temp->anchor_addr, temp->range, temp->dbm);
-        // sprintf(c, "%X:%.1f m", temp->anchor_addr, temp->range);
-        sprintf(c, "%.1f m", temp->range);
-        display.setTextSize(2);
-        display.setCursor(0, row++ * 32); // Start at top-left corner
-        display.println(c);
+//         // sprintf(c, "%X:%.1f m %.1f", temp->anchor_addr, temp->range, temp->dbm);
+//         // sprintf(c, "%X:%.1f m", temp->anchor_addr, temp->range);
+//         sprintf(c, "%.1f m", temp->range);
+//         display.setTextSize(2);
+//         display.setCursor(0, row++ * 32); // Start at top-left corner
+//         display.println(c);
 
-        display.println("");
+//         display.println("");
 
-        sprintf(c, "%.2f dbm", temp->dbm);
-        display.setTextSize(2);
-        display.println(c);
+//         sprintf(c, "%.2f dbm", temp->dbm);
+//         display.setTextSize(2);
+//         display.println(c);
 
-        if (row >= 1)
-        {
-            break;
-        }
-    }
-    delay(100);
-    display.display();
-    return;
-}
+//         if (row >= 1)
+//         {
+//             break;
+//         }
+//     }
+//     delay(100);
+//     display.display();
+//     return;
+// }

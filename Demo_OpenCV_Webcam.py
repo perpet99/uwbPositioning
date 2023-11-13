@@ -400,7 +400,20 @@ def main():
             r1 = uwb_range_offset(list[0]["R"])
             r2 = uwb_range_offset(list[1]["R"])
 
-            d = distance(aList[0].vx,aList[0].vy,aList[1].vx,aList[1].vy)
+            a1 = aList[0]
+            a2 = aList[1]
+
+            if a2.vx < a1.vx:
+                temp = r1
+                r1 = r2
+                r2 = temp
+                temp = a1
+                a1 = a2
+                a2 = temp
+
+
+
+            d = distance(a1.vx,a1.vy,a2.vx,a2.vy)
             d =  d / boxinfo.meter2pixel
             rx, ry = tag_pos(float(r2), float(r1), d)
 
@@ -409,7 +422,7 @@ def main():
                 # draw_uwb_anchor(rx2, ry2, "TAG", t_a3)
                 draw_uwb_anchor(frame, rx2, ry2, 0, "TAG", (0, 0, 255))
             else :
-                draw_uwb_anchor(frame,aList[0].vx+rx*boxinfo.meter2pixel, aList[0].vy+ry*boxinfo.meter2pixel,0, "TAG", (0,0,255))
+                draw_uwb_anchor(frame,a1.vx+rx*boxinfo.meter2pixel, a2.vy+ry*boxinfo.meter2pixel,0, "TAG", (0,0,255))
 
 
 
